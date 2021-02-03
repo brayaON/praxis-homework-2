@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Requirements for build
+# INSTALLING REQUIREMENTS
 sudo yum update
 
 # Git
@@ -27,3 +27,18 @@ fi
 if ! [ -L "/usr/bin/vue" ]; then
     sudo npm install -g @vue/cli
 fi
+
+# BUILD PROCESS
+if ! [ -d "/home/vagrant/vuego-demoapp" ]; then
+    git clone https://github.com/jdmendozaa/vuego-demoapp.git /home/vagrant/vuego-demoapp
+fi
+
+# Golang
+cd /home/vagrant/vuego-demoapp/server
+go build && mv vuego-demoapp /shared
+
+# Vue
+cd /home/vagrant/vuego-demoapp/spa
+sudo npm install
+sudo npm run build
+tar -czf dist.tar.gz dist && mv dist.tar.gz /shared
