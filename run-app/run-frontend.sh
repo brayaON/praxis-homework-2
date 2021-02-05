@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
 # Decompress dist artifact
-tar -C /shared -xzf /shared/dist.tar.gz
+if ! [ -d "/shared/dist" ]; then
+    tar -C /shared -xzf /shared/dist.tar.gz
+fi
 
 # Set up the nginx repo
 sudo cat > /etc/rum.repos.d/nginx.repo << 'end'
