@@ -16,6 +16,7 @@ if ! [ -d "/usr/local/go" ]; then
     rm /home/vagrant/go1.15.7.linux-amd64.tar.gz
 fi
 echo "export PATH=$PATH:/usr/local/go/bin" > /etc/profile.d/sh.local
+echo "export PORT=4001" >> /etc/profile.d/sh.local
 
 # Node & NPM
 NODEJS=`sudo yum list installed | grep -w nodejs | wc -l`
@@ -35,9 +36,10 @@ fi
 
 # Golang
 cd /home/vagrant/vuego-demoapp/server
-go build && mv vuego-demoapp /shared
+/usr/local/go/bin/go build && mv vuego-demoapp /shared
 
 # Vue
+echo 'VUE_APP_API_ENDPOINT="http://10.0.0.8:4001/api"' > /home/vagrant/vuego-demoapp/spa/.env.production.local
 cd /home/vagrant/vuego-demoapp/spa
 sudo npm install
 sudo npm run build
