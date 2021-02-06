@@ -4,8 +4,9 @@
 if ! [ -d "/shared/dist" ]; then
     tar -C /shared -xzf /shared/dist.tar.gz
 fi
+echo "Uncompressed dist.tar.gz file";
 
-# Set up the nginx repo
+# Set up the nginx repo in order to get the latest version
 sudo cat > /etc/rum.repos.d/nginx.repo << 'end'
 [nginx]
 nme=nginx repo
@@ -16,16 +17,20 @@ end
 
 # Update w/ new repositories
 sudo yum update
+echo "Repositories added"
+
 
 # Install nginx
 NGINX=`sudo yum list installed | grep -w nginx | wc -l`
 if [ $NGINX -eq 0 ]; then
     sudo yum install -y nginx
-fi
 
-# Running nginx
-sudo systemctl start nginx
-sudo systemctl enable nginx
+    # Running nginx
+    sudo systemctl start nginx
+    sudo systemctl enable nginx
+fi
+echo "nginx installed";
+
 
 # Updating nginx.conf
 sudo cat > /etc/nginx/nginx.conf << 'end'
@@ -63,3 +68,5 @@ end
 
 # Update changes
 sudo systemctl reload nginx
+echo "Default config updated"
+
